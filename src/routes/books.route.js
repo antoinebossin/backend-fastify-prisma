@@ -34,16 +34,48 @@ async function booksRoute(fastify, options) {
         },
       },
     };
+
     const createUserSchema = {
       body: {
         type: 'object',
-        required: ['username', 'password'],
+        required: ['username', 'password','id'],
         properties: {
-          title: { type: 'string' },  
-          author: { type: 'string' },
+          username: { type: 'string' },  
+          password: { type: 'string' },
         },
       },
     };
+
+    fastify.post('/register', { schema: createUserSchema }, async (request, reply) => {
+      const { username, password} = request.body;
+      if (!username || !password) {
+        reply.code(400).send({ error: 'username and password' });
+        return;
+      }
+      const id = user.id
+      const utilisateur = await fastify.prisma.user.create({
+        data: {username, password},
+      });
+      request.session.iduser = id;
+      request.session.isconnected = true;
+
+    });
+    
+    fastify.post('/login', { schema: createUserSchema }, async (request, reply) => {
+      const { username, password} = request.body;
+      if (!username || !password) {
+        reply.code(400).send({ error: 'username and password' });
+        return;
+      }
+      const id = user.id
+      const utilisateur = await fastify.prisma.user.create({
+        data: {username, password},
+      });
+      request.session.iduser = id;
+      request.session.isconnected = true;
+
+    });
+
     fastify.post('/', { schema: createBookSchema }, async (request, reply) => {
       const { title, author } = request.body;
       if (!title || !author) {
