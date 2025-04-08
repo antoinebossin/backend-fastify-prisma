@@ -34,7 +34,16 @@ async function booksRoute(fastify, options) {
         },
       },
     };
-
+    const createUserSchema = {
+      body: {
+        type: 'object',
+        required: ['username', 'password'],
+        properties: {
+          title: { type: 'string' },  
+          author: { type: 'string' },
+        },
+      },
+    };
     fastify.post('/', { schema: createBookSchema }, async (request, reply) => {
       const { title, author } = request.body;
       if (!title || !author) {

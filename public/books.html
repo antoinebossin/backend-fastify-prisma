@@ -1,0 +1,29 @@
+
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Liste des Livres</title>
+</head>
+<body>
+  <h1>Livres disponibles</h1>
+  <ul id="books-list">
+  </ul>
+
+  <script>
+    // Récupérer les livres depuis /books
+    fetch('/books')
+      .then(response => {
+        return response.json();
+        
+      })
+      .then(books => {
+        const list = document.getElementById('books-list');
+        books.forEach(book => {
+          const li = document.createElement('li');
+          li.textContent = book.title || "Titre inconnu";
+          list.appendChild(li);
+        });
+      })
+  </script>
+</body>
+</html>
